@@ -1,0 +1,25 @@
+<!-- 
+    Fichier de configuration (Deployment Descriptor) pour l'application web Java.
+    Ce fichier définit les paramètres, les servlets, et les mappages d'URL de l'application.
+    Utilisé par Tomcat pour configurer le comportement de l'application web.
+-->
+
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+         http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+
+    <!-- Nom d'affichage de l'application (visible dans Tomcat Manager) -->
+    <display-name>Auth Login Application</display-name>
+
+    <!-- 
+        Liste des fichiers de bienvenue (index) 
+        Défini les fichiers par défaut à servir quand on accède à la racine de l'application
+    -->
+    <welcome-file-list>
+        <!-- Le premier fichier trouvé sera utilisé comme page d'accueil -->
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+</web-app>
