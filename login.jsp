@@ -14,7 +14,16 @@
     </script>
 </head>
 <body>
+<%
+    String flash = (String) session.getAttribute("flash");
+    String flashType = (String) session.getAttribute("flashType");
+    if (flash != null) { session.removeAttribute("flash"); session.removeAttribute("flashType"); }
+%>
 <h2>Login</h2>
+<% if (flash != null) { %>
+    <div style="color: <%= "Error".equals(flashType) ? "red" : "green" %>;"> <strong><%= flashType %>:</strong> <%= flash %></div>
+<% } %>
+
 <form method="post" action="login" onsubmit="return validateForm();">
     <label>Email: <input id="email" name="email" type="email" required /></label><br/>
     <label>Password: <input name="password" type="password" required /></label><br/>

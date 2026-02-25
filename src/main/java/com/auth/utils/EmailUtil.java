@@ -21,11 +21,11 @@ public class EmailUtil {
         // Créer un objet Properties pour configurer les paramètres du serveur SMTP
         Properties props = new Properties();
         
-        // Configurer le serveur SMTP Gmail
-        props.put("mail.smtp.host", "smtp.gmail.com");  // Serveur SMTP de Gmail
-        props.put("mail.smtp.port", "587");              // Port SMTP (TLS)
-        props.put("mail.smtp.auth", "true");             // Activer l'authentification
-        props.put("mail.smtp.starttls.enable", "true");  // Activer le chiffrement TLS
+        // Charger les paramètres SMTP depuis la configuration
+        props.put("mail.smtp.host", com.auth.utils.Config.get("email.host", "smtp.gmail.com"));
+        props.put("mail.smtp.port", com.auth.utils.Config.get("email.port", "587"));
+        props.put("mail.smtp.auth", com.auth.utils.Config.get("email.auth", "true"));
+        props.put("mail.smtp.starttls.enable", com.auth.utils.Config.get("email.starttls", "true"));
 
         // Lire les identifiants depuis les variables d'environnement pour éviter les secrets en dur
         final String user = System.getenv("EMAIL_USER");

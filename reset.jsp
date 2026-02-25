@@ -16,7 +16,16 @@
     </script>
 </head>
 <body>
+<%
+    String flash = (String) session.getAttribute("flash");
+    String flashType = (String) session.getAttribute("flashType");
+    if (flash != null) { session.removeAttribute("flash"); session.removeAttribute("flashType"); }
+%>
 <h2>Reset Password</h2>
+<% if (flash != null) { %>
+    <div style="color: <%= "Error".equals(flashType) ? "red" : "green" %>;"> <strong><%= flashType %>:</strong> <%= flash %></div>
+<% } %>
+
 <form method="post" action="reset" onsubmit="return validateForm();">
     <label>Token: <input id="token" name="token" type="text" required /></label><br/>
     <label>New Password: <input id="password" name="password" type="password" required /></label><br/>

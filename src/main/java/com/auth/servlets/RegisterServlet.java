@@ -34,8 +34,10 @@ public class RegisterServlet extends HttpServlet {
 
         // Vérifier si l'utilisateur existe déjà
         if (userDAO.findByEmail(email).isPresent()) {
-            resp.setStatus(HttpServletResponse.SC_CONFLICT);
-            resp.getWriter().write("User already exists");
+            // Utiliser message flash et rediriger vers la page d'inscription
+            req.getSession().setAttribute("flash", "User already exists");
+            req.getSession().setAttribute("flashType", "Error");
+            resp.sendRedirect(req.getContextPath() + "/register.jsp");
             return;
         }
 
@@ -45,12 +47,14 @@ public class RegisterServlet extends HttpServlet {
         User u = new User(email, hash);
         boolean ok = userDAO.createUser(u);
         if (!ok) {
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().write("Unable to create user");
+            req.getSession().setAttribute("flash", "Unable to create user");
+            req.getSession().setAttribute("flashType", "Error");
+            resp.sendRedirect(req.getContextPath() + "/error.jsp");
             return;
         }
 
-        resp.setStatus(HttpServletResponse.SC_CREATED);
-        resp.getWriter().write("User created");
+        req.getSession().setAttribute("flash", "User created successfully");
+        req.getSession().setAttribute("flashType", "Success");
+        resp.sendRedirect(req.getContextPath() + "/success.jsp");
     }
 }

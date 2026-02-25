@@ -42,16 +42,18 @@ public class ResetPasswordServlet extends HttpServlet {
 
         Optional<User> maybe = userDAO.findByResetToken(token);
         if (maybe.isEmpty()) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write("Invalid or expired token");
+            req.getSession().setAttribute("flash", "Invalid or expired token");
+            req.getSession().setAttribute("flashType", "Error");
+            resp.sendRedirect(req.getContextPath() + "/error.jsp");
             return;
         }
 
         User user = maybe.get();
         Instant expires = user.getResetExpires();
         if (expires == null || Instant.now().isAfter(expires)) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write("Invalid or expired token");
+            req.getSession().setAttribute("flash", "Invalid or expired token");
+            req.getSession().setAttribute("flashType", "Error");
+            resp.sendRedirect(req.getContextPath() + "/error.jsp");
             return;
         }
 
@@ -59,12 +61,14 @@ public class ResetPasswordServlet extends HttpServlet {
         String hash = PasswordUtil.hashPassword(newPassword);
         boolean ok = userDAO.updatePassword(user.getId(), hash);
         if (!ok) {
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().write("Unable to reset password");
+            req.getSession().setAttribute("flash", "Unable to reset password");
+            req.getSession().setAttribute("flashType", "Error");
+            resp.sendRedirect(req.getContextPath() + "/error.jsp");
             return;
         }
 
-        resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().write("Password has been reset");
+        req.getSession().setAttribute("flash", "Password has been reset");
+        req.getSession().setAttribute("flashType", "Success");
+        resp.sendRedirect(req.getContextPath() + "/success.jsp");
     }
 }

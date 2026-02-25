@@ -45,8 +45,9 @@ public class ForgotPasswordServlet extends HttpServlet {
         Optional<User> maybe = userDAO.findByEmail(email);
         if (maybe.isEmpty()) {
             // Pour ne pas divulguer l'existence d'un compte, renvoyer OK même si l'email n'existe pas
-            resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().write("If the account exists, you will receive an email with reset instructions");
+            req.getSession().setAttribute("flash", "If the account exists, you will receive an email with reset instructions");
+            req.getSession().setAttribute("flashType", "Success");
+            resp.sendRedirect(req.getContextPath() + "/success.jsp");
             return;
         }
 
@@ -61,11 +62,11 @@ public class ForgotPasswordServlet extends HttpServlet {
 
         boolean ok = userDAO.setResetToken(user.getId(), token, expires);
         if (!ok) {
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            resp.getWriter().write("Unable to initiate password reset");
+            req.getSession().setAttribute("flash", "Unable to initiate password reset");
+            req.getSession().setAttribute("flashType", "Error");
+            resp.sendRedirect(req.getContextPath() + "/error.jsp");
             return;
         }
-
         // Construire un lien de réinitialisation
         String base = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + req.getContextPath();
         String resetLink = base + "/reset?token=" + token;
@@ -75,7 +76,8 @@ public class ForgotPasswordServlet extends HttpServlet {
         String body = "Click the link to reset your password: " + resetLink + "\nThis link expires in 1 hour.";
         EmailUtil.sendEmail(user.getEmail(), subject, body);
 
-        resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().write("If the account exists, you will receive an email with reset instructions");
+        req.getSession().setAttribute("flash", "If the account exists, you will receive an email with reset instructions");
+        req.getSession().setAttribute("flashType", "Success");
+        resp.sendRedirect(req.getContextPath() + "/success.jsp");
     }
 }

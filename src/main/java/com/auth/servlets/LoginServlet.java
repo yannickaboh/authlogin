@@ -42,8 +42,9 @@ public class LoginServlet extends HttpServlet {
 
         Optional<User> maybe = userDAO.findByEmail(email);
         if (maybe.isEmpty()) {
-            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            resp.getWriter().write("Invalid email or password");
+            req.getSession().setAttribute("flash", "Invalid email or password");
+            req.getSession().setAttribute("flashType", "Error");
+            resp.sendRedirect(req.getContextPath() + "/login.jsp");
             return;
         }
 
@@ -52,8 +53,9 @@ public class LoginServlet extends HttpServlet {
         // Vérifier le mot de passe de manière résistante aux attaques par timing
         boolean ok = PasswordUtil.verifyPassword(password, user.getPasswordHash());
         if (!ok) {
-            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            resp.getWriter().write("Invalid email or password");
+            req.getSession().setAttribute("flash", "Invalid email or password");
+            req.getSession().setAttribute("flashType", "Error");
+            resp.sendRedirect(req.getContextPath() + "/login.jsp");
             return;
         }
 
@@ -62,7 +64,8 @@ public class LoginServlet extends HttpServlet {
         session.setAttribute("userId", user.getId());
         session.setAttribute("userEmail", user.getEmail());
 
-        resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().write("Logged in");
+        session.setAttribute("flash", "Logged in successfully");
+        session.setAttribute("flashType", "Success");
+        resp.sendRedirect(req.getContextPath() + "/success.jsp");
     }
 }

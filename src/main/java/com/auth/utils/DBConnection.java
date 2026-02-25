@@ -11,11 +11,10 @@ import java.sql.SQLException;
  * pour obtenir une connexion à la base de données.
  */
 public class DBConnection {
-    // Lire la configuration depuis les variables d'environnement si disponibles
-    // Variables attendues: DB_URL, DB_USER, DB_PASS
-    private static final String URL = System.getenv("DB_URL") != null ? System.getenv("DB_URL") : "jdbc:postgresql://localhost:5432/auth_system";
-    private static final String USER = System.getenv("DB_USER") != null ? System.getenv("DB_USER") : "auth_user";
-    private static final String PASSWORD = System.getenv("DB_PASS") != null ? System.getenv("DB_PASS") : "QWzx1234@";
+    // Lire la configuration depuis application.properties avec override par variables d'environnement
+    private static final String URL = com.auth.utils.Config.get("db.url", "jdbc:postgresql://localhost:5432/auth_system");
+    private static final String USER = com.auth.utils.Config.get("db.user", "auth_user");
+    private static final String PASSWORD = com.auth.utils.Config.get("db.pass", "QWzx1234@");
 
     /**
      * Obtient une connexion à la base de données PostgreSQL.
