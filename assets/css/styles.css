@@ -1,0 +1,29 @@
+:root{
+    --brand-primary: #1F3A93; /* deep blue */
+    --brand-accent: #FF6B6B;  /* coral accent */
+    --bg: #F7F9FC;
+    --muted: #6C757D;
+}
+
+body{
+    background: var(--bg);
+    color: #222;
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+.navbar-brand img{ height:28px; width:28px; margin-right:8px; }
+
+.btn-primary{
+    background-color: var(--brand-primary);
+    border-color: var(--brand-primary);
+}
+
+.btn-primary:hover{ background-color: #16306f; }
+
+.form-container{ margin-top: 2rem; }
+
+.card{ border-radius:12px; }
+
+.alert{ border-radius:8px; }
+
+.user-badge{ color: #fff; background: var(--brand-accent); padding:6px 10px; border-radius:18px; font-weight:600; }
