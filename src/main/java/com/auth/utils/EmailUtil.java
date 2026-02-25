@@ -27,9 +27,15 @@ public class EmailUtil {
         props.put("mail.smtp.auth", "true");             // Activer l'authentification
         props.put("mail.smtp.starttls.enable", "true");  // Activer le chiffrement TLS
 
-        // Identifiants Gmail (utiliser un mot de passe d'application, pas le mot de passe principal)
-        final String user = "votre-mail@gmail.com";
-        final String pass = "votre-mot-de-passe-applicatif-gmail";
+        // Lire les identifiants depuis les variables d'environnement pour éviter les secrets en dur
+        final String user = System.getenv("EMAIL_USER");
+        final String pass = System.getenv("EMAIL_PASS");
+
+        if (user == null || pass == null) {
+            // Ne pas tenter d'envoyer d'email si les identifiants ne sont pas configurés
+            System.err.println("Email credentials not set (EMAIL_USER, EMAIL_PASS)");
+            return;
+        }
 
         // Essayer d'envoyer l'email
         try {

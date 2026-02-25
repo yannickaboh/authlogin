@@ -28,9 +28,15 @@ public class ResetPasswordServlet extends HttpServlet {
         String token = req.getParameter("token");
         String newPassword = req.getParameter("password");
 
-        if (token == null || token.isBlank() || newPassword == null || newPassword.length() < 6) {
+        if (token == null || token.isBlank() || newPassword == null) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write("Invalid token or password (min 6 chars)");
+            resp.getWriter().write("Invalid token or password");
+            return;
+        }
+
+        if (!com.auth.utils.ValidationUtil.isStrongPassword(newPassword)) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("Password does not meet complexity requirements (min 8 chars, include upper/lower/digit/special)");
             return;
         }
 

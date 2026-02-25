@@ -35,6 +35,13 @@ public class ForgotPasswordServlet extends HttpServlet {
             return;
         }
 
+        // Validate email format but do not reveal account existence
+        if (!com.auth.utils.ValidationUtil.isValidEmail(email)) {
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.getWriter().write("If the account exists, you will receive an email with reset instructions");
+            return;
+        }
+
         Optional<User> maybe = userDAO.findByEmail(email);
         if (maybe.isEmpty()) {
             // Pour ne pas divulguer l'existence d'un compte, renvoyer OK même si l'email n'existe pas

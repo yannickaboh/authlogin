@@ -33,6 +33,13 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
+        // Basic server-side email format validation
+        if (!com.auth.utils.ValidationUtil.isValidEmail(email)) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write("Invalid email format");
+            return;
+        }
+
         Optional<User> maybe = userDAO.findByEmail(email);
         if (maybe.isEmpty()) {
             resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

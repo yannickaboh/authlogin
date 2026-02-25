@@ -25,10 +25,10 @@ public class RegisterServlet extends HttpServlet {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
 
-        // Validation basique
-        if (email == null || email.isBlank() || password == null || password.length() < 6) {
+        // Validation côté serveur (plus stricte)
+        if (!com.auth.utils.ValidationUtil.isValidEmail(email) || !com.auth.utils.ValidationUtil.isStrongPassword(password)) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            resp.getWriter().write("Invalid email or password (min 6 chars)");
+            resp.getWriter().write("Invalid email or weak password (min 8 chars, include upper/lower/digit/special)");
             return;
         }
 
